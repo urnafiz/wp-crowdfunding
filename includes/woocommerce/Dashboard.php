@@ -29,6 +29,10 @@ class Dashboard{
     public function wpcf_personal_data_download(){
         $user_id = get_current_user_id();
         if ( isset($_GET['download_data']) && $user_id ) {
+            // Verify the user's capability to download personal data
+            if (!current_user_can('download_own_personal_data')) {
+                wp_die(__('You do not have permission to download this data!', 'wp-crowdfunding'));
+            }
             require_once ABSPATH . 'wp-admin/includes/export.php';
             $args = array(
                 'content'    => 'all',
